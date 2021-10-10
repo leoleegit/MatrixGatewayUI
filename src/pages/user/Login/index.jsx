@@ -1,17 +1,17 @@
-import { 
+import {
   LockOutlined,
-  MobileOutlined, 
-  UserOutlined, 
-  SafetyCertificateOutlined
+  MobileOutlined,
+  UserOutlined,
+  SafetyCertificateOutlined,
 } from '@ant-design/icons';
-import { Alert, Space, message, Tabs } from 'antd';
+import { Alert, message } from 'antd';
 import React, { useState } from 'react';
 import ProForm, { ProFormCaptcha, ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
-import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from 'umi';
+import { useIntl, Link, history, FormattedMessage, useModel } from 'umi';
 import Footer from '@/components/Footer';
-import CaptchaImage from '@/components/Form/Captcha'; 
+import CaptchaImage from '@/components/Form/Captcha';
 import { getFakeCaptcha, login } from '@/services/ant-design-pro/login';
-import { initRequest } from '@/services/ant-design-pro/api2'; 
+import { initRequest } from '@/services/ant-design-pro/api2';
 import styles from './index.less';
 
 const LoginMessage = ({ content }) => (
@@ -29,34 +29,33 @@ const Login = () => {
   const [imageData, setImageData] = useState({});
   const [codeID, setCodeID] = useState({});
   const [submitting, setSubmitting] = useState(false);
-  const [userLoginState, setUserLoginState] = useState({});
-  const [type, setType] = useState('account');
-  const { initialState,setInitialState } = useModel('@@initialState');
+  const [userLoginState] = useState({});
+  const [type] = useState('account');
+  const { setInitialState } = useModel('@@initialState');
   const intl = useIntl();
-
 
   const getCaptcha = async () => {
     try {
-      const data = await getFakeCaptcha(); 
+      const data = await getFakeCaptcha();
       if (data.code === 200) {
         return data.result;
       }
-    } catch (error) { 
+    } catch (error) {
       return [];
-    } 
+    }
     return [];
-  }
+  };
 
   const onClickImage = () => {
     getCaptcha().then((data) => {
-      setCodeID(data.imageID); 
-      setImageData(data.imageBase64Data); 
-    })
-  }  
+      setCodeID(data.imageID);
+      setImageData(data.imageBase64Data);
+    });
+  };
 
-  const fetchUserInfo = async (currentUser) => {  
-    if (currentUser) { 
-      localStorage.setItem("token",currentUser.token); 
+  const fetchUserInfo = async (currentUser) => {
+    if (currentUser) {
+      localStorage.setItem('token', currentUser.token);
       initRequest();
       await setInitialState((s) => ({ ...s, currentUser }));
     }
@@ -83,7 +82,7 @@ const Login = () => {
         const { redirect } = query;
         history.push(redirect || '/');
         return;
-      } // 如果失败去设置用户错误信息 
+      } // 如果失败去设置用户错误信息
       message.error(msg.msg);
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({
@@ -94,11 +93,11 @@ const Login = () => {
     }
 
     setSubmitting(false);
-  }; 
+  };
 
   const { status, type: loginType } = userLoginState;
   return (
-    <div className={styles.container}> 
+    <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.top}>
           <div className={styles.header}>
@@ -107,7 +106,9 @@ const Login = () => {
               <span className={styles.title}>{'Matrix Console'}</span>
             </Link>
           </div>
-          <div className={styles.desc}> <></>
+          <div className={styles.desc}>
+            {' '}
+            <></>
           </div>
         </div>
 
@@ -186,7 +187,7 @@ const Login = () => {
                     },
                   ]}
                 />
-                <ProFormText.Password 
+                <ProFormText.Password
                   autocomplete="current-password"
                   name="password"
                   fieldProps={{
@@ -209,11 +210,11 @@ const Login = () => {
                     },
                   ]}
                 />
-                 <CaptchaImage  
+                <CaptchaImage
                   fieldProps={{
                     size: 'large',
                     prefix: <SafetyCertificateOutlined className={styles.prefixIcon} />,
-                  }} 
+                  }}
                   name="verCode"
                   placeholder={intl.formatMessage({
                     id: 'pages.login.captcha.placeholder',
@@ -226,7 +227,7 @@ const Login = () => {
                         <FormattedMessage
                           id="pages.login.captcha.required"
                           defaultMessage="请输入验证码"
-                        /> 
+                        />
                       ),
                     },
                   ]}
@@ -234,7 +235,6 @@ const Login = () => {
                   onClickImage={onClickImage}
                 />
               </>
-              
             )}
 
             {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
@@ -338,7 +338,7 @@ const Login = () => {
                 <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
               </a>
             </div>
-          </ProForm> 
+          </ProForm>
         </div>
       </div>
       <Footer />
