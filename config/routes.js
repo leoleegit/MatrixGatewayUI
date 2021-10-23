@@ -48,6 +48,7 @@ export default [
     component: './AccountSettings',
   },
   { 
+    path: '/welcome',
     component: './Welcome',
   },
   {

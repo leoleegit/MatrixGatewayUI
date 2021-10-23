@@ -105,7 +105,8 @@ const AssignPermission = (props) => {
             } 
         
             try {
-              const data = await permissionListFunction({...option,rootId}); 
+              const roleId = props?.assignPermissionRole?.id
+              const data = await permissionListFunction({...option,rootId,roleId}); 
               if (data.code === 200) {
                   if(data.results){
                     return {
@@ -216,10 +217,9 @@ const AssignPermission = (props) => {
     }
 
     const filterSelect = (dataSource) =>{  
-        const data   = [];
-        const roleId = props?.assignPermissionRole?.id;
+        const data   = []; 
         dataSource.forEach(element => { 
-            if(element.roleId === roleId)
+            if(element.selected === 1)
                 data.push(element.id);
         });
         setSelectedRowKeys(data) 

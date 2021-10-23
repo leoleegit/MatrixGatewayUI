@@ -16,14 +16,14 @@ export default {
       },
     },
     '/admin/': {
-      target: 'http://192.168.3.116:18084',
+      target: 'http://192.168.3.116:18080',
       changeOrigin: true,
       pathRewrite: {
         '^': '',
       },
     },
     '/media/': {
-      target: 'http://192.168.3.116:18086',
+      target: 'http://192.168.3.116:18080',
       changeOrigin: true,
       pathRewrite: {
         '^': '',
